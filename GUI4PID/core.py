@@ -5,6 +5,7 @@ import pyqtgraph as pg
 import serial
 import threading
 
+s = None
 connected = False
 try:
     s = serial.Serial('COM10', 38400, stopbits=serial.STOPBITS_TWO)
@@ -123,4 +124,5 @@ if __name__ == '__main__':
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QtGui.QApplication.instance().exec_()
         read = False
-        s.close()
+        if connected:
+            s.close()
