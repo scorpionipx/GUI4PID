@@ -5,8 +5,12 @@ import pyqtgraph as pg
 import serial
 import threading
 
-
-s = serial.Serial('COM10', 38400, stopbits=serial.STOPBITS_TWO)
+connected = False
+try:
+    s = serial.Serial('COM10', 38400, stopbits=serial.STOPBITS_TWO)
+    connected = True
+except Exception as err:
+    print("Failed to connect to EVB5.1: {}".format(err))
 read = True
 
 app = QtGui.QApplication([])
@@ -54,6 +58,8 @@ def get_com_port_data():
 
     :return:
     """
+    if not connected:
+        return
     global data0, data1, data2, data3, data4, data5
     while read:
         sleep(.005)
@@ -88,9 +94,6 @@ def get_com_port_data():
 read_com_data_thread = threading.Thread(target=get_com_port_data)
 read_com_data_thread.start()
 # read_com_data_thread.join()
-
-
-print("Fk off")
 
 
 def update():
